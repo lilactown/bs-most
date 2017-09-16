@@ -121,10 +121,12 @@ testPromise
   (
     fun _ => {
       let result = [||];
-      let combine = Helpers.combineArray result;
+      let combineResult = Helpers.combineArray result;
       let success _ => Helpers.asyncExpectToEqual [|2, 4, 6|] result;
-      Most.from [|1, 2, 3|] |> Most.map (fun n => n * 2) |> Most.observe combine |>
-      Js.Promise.then_ success
+      Most.(
+        from [|1, 2, 3|] |> map (fun n => n * 2) |> observe combineResult |>
+        Js.Promise.then_ success
+      )
     }
   );
 
