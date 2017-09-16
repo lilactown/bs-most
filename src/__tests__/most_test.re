@@ -1,5 +1,3 @@
-exception Oh_no;
-
 open Jest;
 
 module Helpers = {
@@ -16,7 +14,7 @@ testPromise
     fun _ => {
       let empty = Most.empty ();
       let success _ => Helpers.asyncExpectToEqual true true;
-      Most.observe (fun _ => raise Oh_no) empty |> Js.Promise.then_ success
+      Most.observe (fun _ => raise (Failure "this shouldn't happen")) empty |> Js.Promise.then_ success
     }
   );
 
