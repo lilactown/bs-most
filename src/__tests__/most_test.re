@@ -14,7 +14,8 @@ testPromise
     fun _ => {
       let empty = Most.empty ();
       let success _ => Helpers.asyncExpectToEqual true true;
-      Most.observe (fun _ => raise (Failure "this shouldn't happen")) empty |> Js.Promise.then_ success
+      Most.observe (fun _ => raise (Failure "this shouldn't happen")) empty |>
+      Js.Promise.then_ success
     }
   );
 
@@ -38,6 +39,20 @@ testPromise
       Most.from [|1, 2|] |> Most.observe combine |> Js.Promise.then_ success
     }
   );
+
+testPromise "fromPromise";
+
+testPromise "periodic";
+
+testPromise "never";
+
+testPromise "iterate";
+
+testPromise "generate";
+
+testPromise "fromEvent";
+
+testPromise "fromEventEmitter";
 
 testPromise
   "concat"
@@ -101,50 +116,60 @@ testPromise
     }
   );
 
-testPromise "map"
-  (fun _ => {
-    let result = [||];
-    let combine = Helpers.combineArray result;
-    let success _ => Helpers.asyncExpectToEqual [|2,4,6|] result;
+testPromise
+  "map"
+  (
+    fun _ => {
+      let result = [||];
+      let combine = Helpers.combineArray result;
+      let success _ => Helpers.asyncExpectToEqual [|2, 4, 6|] result;
+      Most.from [|1, 2, 3|] |> Most.map (fun n => n * 2) |> Most.observe combine |>
+      Js.Promise.then_ success
+    }
+  );
 
-    Most.from [|1,2,3|]
-    |> Most.map (fun n => n * 2)
-    |> Most.observe combine
-    |> Js.Promise.then_ success
-  });
+testPromise
+  "constant"
+  (
+    fun _ => {
+      let result = [||];
+      let combine = Helpers.combineArray result;
+      let success _ => Helpers.asyncExpectToEqual [|10, 10, 10|] result;
+      Most.from [|1, 2, 3|] |> Most.constant 10 |> Most.observe combine |> Js.Promise.then_ success
+    }
+  );
 
-testPromise "constant"
-  (fun _ => {
-    let result = [||];
-    let combine = Helpers.combineArray result;
-    let success _ => Helpers.asyncExpectToEqual [|10,10,10|] result;
+testPromise
+  "scan"
+  (
+    fun _ => {
+      let result = [||];
+      let combine = Helpers.combineArray result;
+      let success _ => Helpers.asyncExpectToEqual [|0, 1, 3, 6, 10|] result;
+      Most.from [|1, 2, 3, 4|] |> Most.scan (fun accum n => accum + n) 0 |> Most.observe combine |>
+      Js.Promise.then_ success
+    }
+  );
 
-    Most.from [|1,2,3|]
-    |> Most.constant 10
-    |> Most.observe combine
-    |> Js.Promise.then_ success
-  });
+testPromise
+  "flatMap"
+  (
+    fun _ => {
+      let result = [||];
+      let combine = Helpers.combineArray result;
+      let success _ => Helpers.asyncExpectToEqual [|0, 1, 0, 2, 0, 3, 0, 4|] result;
+      Most.from [|1, 2, 3, 4|] |> Most.flatMap (fun x => Most.from [|0, x|]) |>
+      Most.observe combine |>
+      Js.Promise.then_ success
+    }
+  );
 
-testPromise "scan"
-  (fun _ => {
-    let result = [||];
-    let combine = Helpers.combineArray result;
-    let success _ => Helpers.asyncExpectToEqual [|0,1,3,6,10|] result;
+testPromise "continueWith";
 
-    Most.from [|1,2,3,4|]
-    |> Most.scan (fun accum n => accum + n) 0
-    |> Most.observe combine
-    |> Js.Promise.then_ success
-  });
+testPromise "concatMap";
 
-testPromise "flatMap"
-  (fun _ => {
-    let result = [||];
-    let combine = Helpers.combineArray result;
-    let success _ => Helpers.asyncExpectToEqual [|0,1,0,2,0,3,0,4|] result;
+testPromise "ap";
 
-    Most.from [|1,2,3,4|]
-    |> Most.flatMap (fun x => Most.from [|0,x|])
-    |> Most.observe combine
-    |> Js.Promise.then_ success
-  })
+testPromise "timestamp";
+
+testPromise "tap";
