@@ -1,9 +1,9 @@
 type stream 'a;
 
 /* observes a stream */
-external observe : ('a => unit) => Js.Promise.t unit = "" [@@bs.module "most"];
+external observe : ('a => unit) => stream 'a => Js.Promise.t unit = "" [@@bs.module "most"];
 
-external forEach : ('a => unit) => Js.Promise.t unit = "" [@@bs.module "most"];
+external forEach : ('a => unit) => stream 'a => Js.Promise.t unit = "" [@@bs.module "most"];
 
 /* Reduce a stream, returning a promise for the ultimate result. */
 external reduce : ('accum => 'a => 'b) => stream 'a => Js.Promise.t 'b = "" [@@bs.module "most"];
@@ -19,7 +19,7 @@ type observer 'a = Js.t {. next : 'a => unit, error : Js.Exn.t => unit, complete
 
 type subscription = Js.t {. unsubscribe : unit => unit};
 
-external subscribe : observer 'a => stream 'a => subscription = "" [@@bs.send.pipe : stream 'a];
+external subscribe : observer 'a => subscription = "" [@@bs.send.pipe : stream 'a];
 
 
 /**
