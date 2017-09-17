@@ -47,21 +47,15 @@ external from : array 'a => stream 'a = "" [@@bs.module "most"];
  */
 external _unfold : ('a => Js.t 'whatever) => 'a => stream 'b = "unfold" [@@bs.module "most"];
 
-module Unfold = {
-  type t 'value 'seed =
-    | Value 'value 'seed
-    | Done;
-};
-
-external cast : Js.t 'a => Js.t 'b = "%identity";
+external unsafeCast : Js.t 'a => Js.t 'b = "%identity";
 
 /* Creates a stream from a generating function and a seed */
 let unfold f =>
   _unfold (
     fun x =>
       switch (f x) {
-      | Unfold.Done => cast {"_done": true}
-      | Unfold.Value value seed => cast {"value": value, "seed": seed}
+      | None => unsafeCast {"_done": true}
+      | Some (value, seed) => unsafeCast {"value": value, "seed": seed}
       }
   );
 
@@ -71,9 +65,9 @@ let fromList list =>
     (
       fun curList =>
         switch curList {
-        | [] => Unfold.Done
-        | [x] => Unfold.Value x []
-        | [x, ...rest] => Unfold.Value x rest
+        | [] => None
+        | [x] => Some (x, [])
+        | [x, ...rest] => Some (x, rest)
         }
     )
     list;

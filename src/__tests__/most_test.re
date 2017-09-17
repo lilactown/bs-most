@@ -102,12 +102,9 @@ testPromise
         (
           fun prev =>
             if (prev < 3) {
-              /*{ "_done": false, "value": prev + 1, "seed": prev + 1 }*/
-              Most.Unfold.Value
-                (prev + 1) (prev + 1)
+              Some (prev + 1, prev + 1)
             } else {
-              Most.Unfold.Done
-                          /*{ "_done": true, "value": prev + 1, "seed": prev + 1 }*/
+              None
             }
         )
         0 |>
@@ -200,6 +197,7 @@ testPromise "timestamp";
 
 testPromise "tap";
 
+
 /**
  * Filtering
  **/
@@ -228,4 +226,3 @@ testPromise "merge";
 testPromise "combine";
 
 testPromise "zip";
-
