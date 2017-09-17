@@ -27,6 +27,11 @@ Most.(
 );
 ```
 
+## What's missing
+
+1. `generate` - Reason doesn't have generator support yet
+2. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
+
 # Build
 ```
 npm run build
