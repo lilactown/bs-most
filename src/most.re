@@ -60,14 +60,16 @@ let unfold f =>
   );
 
 /* Creates a stream from a Reason list */
-let fromList =
-  unfold (
-    fun curList =>
-      switch curList {
-      | [] => None
-      | [x, ...rest] => Some (x, rest)
-      }
-  );
+let fromList list =>
+  unfold
+    (
+      fun curList =>
+        switch curList {
+        | [] => None
+        | [x, ...rest] => Some (x, rest)
+        }
+    )
+    list;
 
 /* Creates a stream from a promise that completes once the promise resolves */
 external fromPromise : Js.Promise.t 'a => stream 'a = "" [@@bs.module "most"];
@@ -232,3 +234,25 @@ external sample6 :
 external sampleWith : stream 'sample => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 external zip : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c = "" [@@bs.module "most"];
+
+
+/**
+ * Combining higher-order streams
+ **/
+/* Given a higher-order stream, return a new stream that adopts the behavior of
+   (ie emits the events of) the most recent inner stream. */
+external switchLatest : stream (stream 'a) => stream 'a = "" [@@bs.module "most"];
+
+/* Given a higher-order stream, return a new stream that merges all the inner streams as they arrive. */
+external join : stream (stream 'a) => stream 'a = "" [@@bs.module "most"];
+
+/* Given a higher-order stream, return a new stream that merges inner streams as they arrive
+   up to the specified concurrency. Once concurrency number of streams are being merged,
+   newly arriving streams will be merged after an existing one ends. */
+external mergeConcurrently : int => stream (stream 'a) => stream 'a = "" [@@bs.module "most"];
+
+
+/**
+ * Awaiting promises
+ **/
+external awaitPromises : stream (Js.Promise.t 'a) => stream 'a = "" [@@bs.module "most"];
