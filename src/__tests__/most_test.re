@@ -97,17 +97,18 @@ testPromise
     fun _ => {
       let result = ref [];
       let combine el => (result := [el, ...!result]) |> Helpers.noOp;
-      let success _ => Helpers.asyncExpectToEqual [3, 2, 1] !result;
+      let success _ => Helpers.asyncExpectToEqual [6, 4, 2] !result;
       Most.unfold
         (
-          fun prev =>
-            if (prev < 3) {
-              Some (prev + 1, prev + 1)
+          fun seed =>
+            if (seed < 4) {
+              let nextSeed = seed + 1;
+              Some (seed * 2, nextSeed)
             } else {
               None
             }
         )
-        0 |>
+        1 |>
       Most.observe combine |>
       Js.Promise.then_ success
     }
