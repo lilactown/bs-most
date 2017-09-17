@@ -40,7 +40,17 @@ testPromise
     }
   );
 
-testPromise "fromPromise";
+testPromise
+  "fromPromise"
+  (
+    fun _ => {
+      let promise = Js.Promise.make (fun ::resolve reject::_ => resolve "OK" [@bs]);
+      let result = ref "";
+      let success = Helpers.asyncExpectToEqual "OK";
+      Most.fromPromise promise |> Most.observe (fun res => result := res) |>
+      Js.Promise.then_ (fun _ => success !result)
+    }
+  );
 
 testPromise "periodic";
 
