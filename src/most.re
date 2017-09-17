@@ -1,9 +1,25 @@
 type stream 'a;
 
 /* observes a stream */
-external observe : ('a => unit) => Js.Promise.t unit = "" [@@bs.send.pipe : stream 'a];
+external observe : ('a => unit) => Js.Promise.t unit = "" [@@bs.module "most"];
 
-external forEach : ('a => unit) => Js.Promise.t unit = "" [@@bs.send.pipe : stream 'a];
+external forEach : ('a => unit) => Js.Promise.t unit = "" [@@bs.module "most"];
+
+/* Reduce a stream, returning a promise for the ultimate result. */
+external reduce : ('accum => 'a => 'b) => stream 'a => Js.Promise.t 'b = "" [@@bs.module "most"];
+
+/* Start consuming events from stream.
+   This can be useful in some cases where you don't want or need to process the terminal events
+   --e.g. when all processing has been done via upstream side-effects.
+   Most times, however, you'll use observe to consume and process terminal events. */
+external drain : stream 'a => Js.Promise.t unit = "" [@@bs.module "most"];
+
+/* Draft ES Observable compatible subscribe. Start consuming events from stream by providing an observer object. */
+type observer 'a = Js.t {. next : 'a => unit, error : Js.Exn.t => unit, complete : unit => unit};
+
+type subscription = Js.t {. unsubscribe : unit => unit};
+
+external subscribe : observer 'a => stream 'a => subscription = "" [@@bs.send.pipe : stream 'a];
 
 
 /**
