@@ -60,16 +60,14 @@ let unfold f =>
   );
 
 /* Creates a stream from a Reason list */
-let fromList list =>
-  unfold
-    (
-      fun curList =>
-        switch curList {
-        | [] => None
-        | [x, ...rest] => Some (x, rest)
-        }
-    )
-    list;
+let fromList =
+  unfold (
+    fun curList =>
+      switch curList {
+      | [] => None
+      | [x, ...rest] => Some (x, rest)
+      }
+  );
 
 /* Creates a stream from a promise that completes once the promise resolves */
 external fromPromise : Js.Promise.t 'a => stream 'a = "" [@@bs.module "most"];

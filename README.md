@@ -38,7 +38,7 @@ Most.(
 2. `sample` is variadic so we offer `sample2`, `sample3`... `sample6`
 3. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
 4. `fromList` is a function that creates a stream from a Reason `List` type, e.g. `fromList([1, 2, 3])`
-4. `unfold` is modeled a bit differently - instead of taking in a JS object { done, value, seed }, it takes an option.
+4. `unfold` is modeled a bit differently - instead of taking in a JS object `{ done, value, seed }`, it takes an option.
 Example:
 ```reason
 let fromList list =>
