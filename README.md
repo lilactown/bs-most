@@ -30,8 +30,28 @@ Most.(
 ## What's missing
 
 1. `generate` - Reason doesn't have generator support yet
-2. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
-3. `transduce` - Awkward to use in Reason/OCaml without a solid transducer impl (maybe coming soon?? 😉)
+2. `transduce` - Awkward to use in Reason/OCaml without a solid transducer impl (maybe coming soon?? 😉)
+
+## What's different
+
+1. Predicates that normally return "truthy" values, now only accept returning booleans
+2. `sample` is variadic so we offer `sample2`, `sample3`... `sample6`
+3. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
+4. `fromList` is a function that creates a stream from a Reason `List` type, e.g. `fromList([1, 2, 3])`
+4. `unfold` is modeled a bit differently - instead of taking in a JS object { done, value, seed }, it takes an option.
+Example:
+```reason
+let fromList list =>
+  unfold
+    (
+      fun curList =>
+        switch curList {
+        | [] => None
+        | [x, ...rest] => Some (x, rest)
+        }
+    )
+    list;
+```
 
 # Build
 ```
