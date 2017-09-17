@@ -66,7 +66,6 @@ let fromList list =>
       fun curList =>
         switch curList {
         | [] => None
-        | [x] => Some (x, [])
         | [x, ...rest] => Some (x, rest)
         }
     )
