@@ -147,19 +147,81 @@ external skipRepeatsWith : ('a => 'a => bool) => stream 'a => stream 'a = "" [@@
 /**
  * Slicing
  **/
+/* Create a new stream containing only events where start <= index < end, where index is the ordinal index of an event in stream.
+   If stream contains fewer than start events, the returned stream will be empty. */
 external slice : int => int => stream 'a => stream 'a = "" [@@bs.module "most"];
 
+/* Create a new stream containing at most n events from stream.
+   If stream contains fewer than n events, the returned stream will be effectively equivalent to stream. */
 external take : int => stream 'a => stream 'a = "" [@@bs.module "most"];
 
+/* Create a new stream that omits the first n events from stream.
+   If stream contains fewer than n events, the returned stream will be empty.  */
 external skip : int => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing all events until predicate returns false. */
+external takeWhile : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing all events after predicate returns false. */
+external skipWhile : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing all events before and including when the predicate returns true. */
+external skipAfter : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing all events until endSignal emits an event. */
+external until : stream 'b => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing all events after startSignal emits its first event. */
+external since : stream 'b => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Create a new stream containing only events that occur during a dynamic time window. */
+external during : stream (stream 'ending) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 
 /**
  * Combining
  **/
+/* Create a new stream containing events from stream1 and stream2. */
 external merge : stream 'a => stream 'a => stream 'a = "" [@@bs.module "most"];
 
+/* Create a new stream that emits the set of latest event values from all input streams
+   whenever a new event arrives on any input stream. */
 external combine : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c =
   "" [@@bs.module "most"];
+
+/* Create a new stream by combining sampled values from many input streams. */
+external sample2 : ('a => 'a => 'b) => stream 'a => stream 'a => stream 'b =
+  "sample" [@@bs.module "most"];
+
+external sample3 : ('a => 'a => 'a => 'b) => stream 'a => stream 'a => stream 'a => stream 'b =
+  "sample" [@@bs.module "most"];
+
+external sample4 :
+  ('a => 'a => 'a => 'a => 'b) => stream 'a => stream 'a => stream 'a => stream 'a => stream 'b =
+  "sample" [@@bs.module "most"];
+
+external sample5 :
+  ('a => 'a => 'a => 'a => 'a => 'b) =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'b =
+  "sample" [@@bs.module "most"];
+
+external sample6 :
+  ('a => 'a => 'a => 'a => 'a => 'a => 'b) =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'b =
+  "sample" [@@bs.module "most"];
+
+/* When an event arrives on asampler, emit the latest event value from a stream of values. */
+external sampleWith : stream 'sample => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 external zip : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c = "" [@@bs.module "most"];

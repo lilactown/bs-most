@@ -31,6 +31,7 @@ Most.(
 
 1. `generate` - Reason doesn't have generator support yet
 2. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
+3. `transduce` - Awkward to use in Reason/OCaml without a solid transducer impl (maybe coming soon?? 😉)
 
 # Build
 ```
