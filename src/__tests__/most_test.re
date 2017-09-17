@@ -8,6 +8,10 @@ module Helpers = {
     Js.Promise.resolve Expect.(expect actual |> toEqual expected);
 };
 
+
+/**
+ * Stream creation
+ **/
 testPromise
   "empty"
   (
@@ -58,11 +62,9 @@ testPromise "never";
 
 testPromise "iterate";
 
-testPromise "generate";
+testPromise "iteratePromise";
 
 testPromise "fromEvent";
-
-testPromise "fromEventEmitter";
 
 testPromise
   "concat"
@@ -126,6 +128,18 @@ testPromise
     }
   );
 
+
+/**
+ * Error handling
+ **/
+testPromise "recoverWith";
+
+testPromise "throwError";
+
+
+/**
+ * Transforming
+ **/
 testPromise
   "map"
   (
@@ -185,3 +199,33 @@ testPromise "ap";
 testPromise "timestamp";
 
 testPromise "tap";
+
+/**
+ * Filtering
+ **/
+testPromise "filter";
+
+testPromise "skipRepeats";
+
+testPromise "skipRepeatsWith";
+
+
+/**
+ * Slicing
+ **/
+testPromise "slice";
+
+testPromise "take";
+
+testPromise "skip";
+
+
+/**
+ * Combining
+ **/
+testPromise "merge";
+
+testPromise "combine";
+
+testPromise "zip";
+
