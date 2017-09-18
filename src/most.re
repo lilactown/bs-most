@@ -6,7 +6,8 @@ external observe : ('a => unit) => stream 'a => Js.Promise.t unit = "" [@@bs.mod
 external forEach : ('a => unit) => stream 'a => Js.Promise.t unit = "" [@@bs.module "most"];
 
 /* Reduce a stream, returning a promise for the ultimate result. */
-external reduce : ('accum => 'a => 'b) => stream 'a => Js.Promise.t 'b = "" [@@bs.module "most"];
+external reduce : ('accum => 'a => 'b) => 'b => stream 'a => Js.Promise.t 'b =
+  "" [@@bs.module "most"];
 
 /* Start consuming events from stream.
    This can be useful in some cases where you don't want or need to process the terminal events
@@ -150,7 +151,8 @@ external filter : ('a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module
 external skipRepeats : stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream with adjacent repeated events removed, using the provided comparison function */
-external skipRepeatsWith : ('a => 'a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external skipRepeatsWith : ('a => 'a => Js.boolean) => stream 'a => stream 'a =
+  "" [@@bs.module "most"];
 
 
 /**

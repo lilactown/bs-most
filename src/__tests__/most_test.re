@@ -48,7 +48,7 @@ testPromise
   "fromPromise"
   (
     fun _ => {
-      let promise = Js.Promise.make (fun ::resolve reject::_ => resolve "OK" [@bs]);
+      let promise = Js.Promise.resolve "OK";
       let result = ref "";
       let success = Helpers.asyncExpectToEqual "OK";
       Most.fromPromise promise |> Most.observe (fun res => result := res) |>
@@ -202,7 +202,24 @@ testPromise "tap";
 /**
  * Filtering
  **/
-testPromise "filter";
+testPromise
+  "filter"
+  (
+    fun _ =>
+      Most.from [|1, 2, 3, 4, 5, 6|] |>
+      Most.filter (
+        fun n =>
+          if (n mod 2 === 0) {
+            Js.true_
+          } else {
+            Js.false_
+          }
+      ) |>
+      Most.reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.then_ (
+        fun result => Js.Promise.resolve Expect.(expect result |> toEqual [6, 4, 2])
+      )
+  );
 
 testPromise "skipRepeats";
 
@@ -218,6 +235,18 @@ testPromise "take";
 
 testPromise "skip";
 
+testPromise "takeWhile";
+
+testPromise "skipWhile";
+
+testPromise "skipAfter";
+
+testPromise "until";
+
+testPromise "since";
+
+testPromise "during";
+
 
 /**
  * Combining
@@ -227,3 +256,57 @@ testPromise "merge";
 testPromise "combine";
 
 testPromise "zip";
+
+testPromise "merge";
+
+testPromise "combine";
+
+testPromise "sample2";
+
+testPromise "sample3";
+
+testPromise "sample4";
+
+testPromise "sample5";
+
+testPromise "sample6";
+
+testPromise "sampleWith";
+
+testPromise "zip";
+
+
+/**
+ * Combining higher-order streams
+ **/
+testPromise "switchLatest";
+
+testPromise "join";
+
+testPromise "mergeConcurrently";
+
+
+/**
+ * Awaiting promises
+ **/
+testPromise "awaitPromises";
+
+
+/**
+ * Rate limiting streams
+ */
+testPromise "debounce";
+
+testPromise "throttle";
+
+
+/**
+ * Delaying streams
+ **/
+testPromise "delay";
+
+
+/**
+ * Sharing streams
+ **/
+testPromise "multicast";
