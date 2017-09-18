@@ -16,6 +16,7 @@
     "bs-platform": "1.9.1"
   },
   "dependencies": {
-    "most": "^1.7.0"
+    "most": "^1.7.0",
+    "most-subject": "^5.3.0"
   }
 }

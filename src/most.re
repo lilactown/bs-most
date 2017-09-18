@@ -310,3 +310,17 @@ external delay : int => stream 'a => stream 'a = "" [@@bs.module "most"];
  **/
 /* Returns a stream equivalent to the original, but which can be shared more efficiently among multiple consumers. */
 external multicast : stream 'a => stream 'a = "" [@@bs.module "most"];
+
+
+/**
+ *  Subjects!
+ **/
+module Subject = {
+  type t 'a;
+  external make : unit => t 'a = "async" [@@bs.module "most-subject"];
+  external asStream : t 'a => stream 'a = "%identity";
+  external next : 'a => t 'a => t 'a = "" [@@bs.module "most-subject"];
+  external error : Js.Exn.t => t 'a => t Js.Exn.t = "" [@@bs.module "most-subject"];
+  external complete : t 'a => t 'a = "" [@@bs.send];
+  external completeWith : 'a => t 'a => t 'a = "complete" [@@bs.module "most-subject"];
+}

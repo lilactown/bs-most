@@ -66,18 +66,29 @@ Most.unfold
   1;
 ```
 
-# Build
+# Subjects
+
+This library also includes some bindings for [Subjects](https://github.com/mostjs-community/subject). Subjects are very useful for e.g. implementing a state store/dispatch system. The API is a little bit different from the raw `most-subject` library:
+
+- `Subject.make`: creates an [asynchronous Subject](https://github.com/mostjs-community/subject#asynct-subjectt)
+- `Subject.asStream`: casts a subject to a stream, to be used by the rest of the `Most` module
+- `Subject.next`: emits a value on a subject
+- `Subject.error`: emits an error on a subject
+- `Subject.complete`: completes a subject with no value
+- `Subject.completeWith`: complets a subject with a value
+
+## Build
 ```
 npm run build
 ```
 
-# Build + Watch
+## Build + Watch
 
 ```
 npm run watch
 ```
 
-# Testing
+## Testing
 
 ```
 npm run test

@@ -325,48 +325,60 @@ testPromise
     }
   );
 
-testPromise "zip" (fun _ => {
-  open Most;
-  let s1 = fromList [Int 1, Int 2, Int 3];
-  let s2 = fromList [String "a", String "b", String "c"];
-  let toTuple a b => (a, b);
-  zip toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-  Js.Promise.(
-    then_ (
-      fun result =>
-        resolve
-          Expect.(
-            expect result |>
-            toEqual [
-              (Int 3, String "c"),
-              (Int 2, String "b"),
-              (Int 1, String "a")
-            ])))
-});
+testPromise
+  "zip"
+  (
+    fun _ => {
+      open Most;
+      let s1 = fromList [Int 1, Int 2, Int 3];
+      let s2 = fromList [String "a", String "b", String "c"];
+      let toTuple a b => (a, b);
+      zip toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.(
+        then_ (
+          fun result =>
+            resolve
+              Expect.(
+                expect result |>
+                toEqual [(Int 3, String "c"), (Int 2, String "b"), (Int 1, String "a")]
+              )
+        )
+      )
+    }
+  );
 
-testPromise "sample1" (fun _ => {
-  open Most;
-  open Expect;
-  let id x => x;
-  let sampler = periodic 100 |> take 10;
-  let s = periodic 200 |> constant 2 |> startWith 1;
+testPromise
+  "sample1"
+  (
+    fun _ => {
+      open Most;
+      open Expect;
+      let id x => x;
+      let sampler = periodic 100 |> take 10;
+      let s = periodic 200 |> constant 2 |> startWith 1;
+      sample1 id sampler s |> reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.(
+        then_ (fun result => resolve (expect result |> toEqual [2, 2, 2, 2, 2, 2, 2, 2, 2, 1]))
+      )
+    }
+  );
 
-  sample1 id sampler s |> reduce (fun acc n => [n, ...acc]) [] |>
-  Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [2,2,2,2,2,2,2,2,2,1])))
-});
-
-
-testPromise "sample2" (fun _ => {
-  open Most;
-  open Expect;
-  let add x y => x + y;
-  let sampler = periodic 100 |> take 10;
-  let s1 = periodic 200 |> constant 1 |> startWith 1;
-  let s2 = periodic 300 |> constant 2;
-
-  sample2 add sampler s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-  Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [3,3,3,3,3,3,3,3,3,3])))
-});
+testPromise
+  "sample2"
+  (
+    fun _ => {
+      open Most;
+      open Expect;
+      let add x y => x + y;
+      let sampler = periodic 100 |> take 10;
+      let s1 = periodic 200 |> constant 1 |> startWith 1;
+      let s2 = periodic 300 |> constant 2;
+      sample2 add sampler s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.(
+        then_ (fun result => resolve (expect result |> toEqual [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]))
+      )
+    }
+  );
 
 testPromise "sample3";
 
@@ -377,8 +389,6 @@ testPromise "sample5";
 testPromise "sample6";
 
 testPromise "sampleWith";
-
-testPromise "zip";
 
 
 /**
@@ -415,3 +425,24 @@ testPromise "delay";
  * Sharing streams
  **/
 testPromise "multicast";
+
+
+/**
+ * Subjects!
+ **/
+testPromise "basic Subject" (fun _ => {
+  open Most;
+  open Expect;
+  let subj = Subject.make ();
+  let stream = Subject.asStream subj;
+
+  let promise = reduce (fun acc n => [n, ...acc]) [] stream |>
+  Js.Promise.then_ (fun result => Js.Promise.resolve (expect result |> toEqual [3,2,1]));
+
+  Subject.next 1 subj;
+  Subject.next 2 subj;
+  Subject.next 3 subj;
+  Subject.complete subj;
+
+  promise  
+});
