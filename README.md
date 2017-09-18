@@ -1,20 +1,12 @@
 # bs-most
 
-BuckleScript bindings for [Most.js](https://github.com/cujojs/most)
+BuckleScript bindings for [Most.js](https://github.com/cujojs/most).
 
+In [Reason](https://reasonml.github.io/):
 ```reason
 let add x y => x + y;
 let isEven x => x mod 2 === 0;
 
-/**
- * Logs:
- * 2
- * 4
- * 6
- * 8
- * 10
- * Stream completed
- **/
 Most.(
   fromList [0,1,2,3,4,5,6,7,8]
   |> map (add 2)
@@ -25,6 +17,16 @@ Most.(
     Js.Promise.resolve ()
   })
 );
+
+/**
+ * Logs:
+ * 2
+ * 4
+ * 6
+ * 8
+ * 10
+ * Stream completed
+ **/
 ```
 
 ## How do I use it?

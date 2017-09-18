@@ -144,13 +144,13 @@ external tap : ('a => unit) => stream 'a => stream 'a = "" [@@bs.module "most"];
  * Filtering
  **/
 /* Create a stream containing only events for which the predicate returns true. */
-external filter : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external filter : ('a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream with adjacent repeated events removed. */
 external skipRepeats : stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream with adjacent repeated events removed, using the provided comparison function */
-external skipRepeatsWith : ('a => 'a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external skipRepeatsWith : ('a => 'a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 
 /**
@@ -169,13 +169,13 @@ external take : int => stream 'a => stream 'a = "" [@@bs.module "most"];
 external skip : int => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream containing all events until predicate returns false. */
-external takeWhile : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external takeWhile : ('a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream containing all events after predicate returns false. */
-external skipWhile : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external skipWhile : ('a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream containing all events before and including when the predicate returns true. */
-external skipAfter : ('a => bool) => stream 'a => stream 'a = "" [@@bs.module "most"];
+external skipAfter : ('a => Js.boolean) => stream 'a => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream containing all events until endSignal emits an event. */
 external until : stream 'b => stream 'a => stream 'a = "" [@@bs.module "most"];
