@@ -297,9 +297,52 @@ testPromise
     }
   );
 
-testPromise "combine";
+testPromise
+  "combine"
+  (
+    fun _ => {
+      open Most;
+      let s1 = fromList [Int 1, Int 2, Int 3];
+      let s2 = fromList [String "a", String "b", String "c"];
+      let toTuple a b => (a, b);
+      combine toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.(
+        then_ (
+          fun result =>
+            resolve
+              Expect.(
+                expect result |>
+                toEqual [
+                  (Int 3, String "c"),
+                  (Int 3, String "b"),
+                  (Int 2, String "b"),
+                  (Int 2, String "a"),
+                  (Int 1, String "a")
+                ]
+              )
+        )
+      )
+    }
+  );
 
-testPromise "zip";
+testPromise "zip" (fun _ => {
+  open Most;
+  let s1 = fromList [Int 1, Int 2, Int 3];
+  let s2 = fromList [String "a", String "b", String "c"];
+  let toTuple a b => (a, b);
+  zip toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+  Js.Promise.(
+    then_ (
+      fun result =>
+        resolve
+          Expect.(
+            expect result |>
+            toEqual [
+              (Int 3, String "c"),
+              (Int 2, String "b"),
+              (Int 1, String "a")
+            ])))
+});
 
 testPromise "merge";
 
