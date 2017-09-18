@@ -46,12 +46,12 @@ external from : array 'a => stream 'a = "" [@@bs.module "most"];
  * We expose an unsafe `_unfold` here, and then below a more
  * typesafe version along with some types to go along with it.
  */
-external _unfold : ('a => Js.t 'whatever) => 'a => stream 'b = "unfold" [@@bs.module "most"];
+external _unfold : ('a => Js.t 'b) => 'a => stream 'c = "unfold" [@@bs.module "most"];
 
 external unsafeCast : Js.t 'a => Js.t 'b = "%identity";
 
 /* Creates a stream from a generating function and a seed */
-let unfold f =>
+let unfold (f: 'a => option ('b, 'a)): ('a => stream 'b) =>
   _unfold (
     fun x =>
       switch (f x) {
