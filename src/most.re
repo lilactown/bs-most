@@ -200,10 +200,18 @@ external during : stream (stream 'ending) => stream 'a => stream 'a = "" [@@bs.m
 /* Create a new stream containing events from stream1 and stream2. */
 external merge : stream 'a => stream 'a => stream 'a = "" [@@bs.module "most"];
 
+/* Array form of merge. Create a new stream containing all events from all streams in the array. */
+external mergeArray : array (stream 'a) => stream 'a = "" [@@bs.module "most"];
+
 /* Create a new stream that emits the set of latest event values from all input streams
    whenever a new event arrives on any input stream. */
 external combine : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c =
   "" [@@bs.module "most"];
+
+/* Array form of combine. Create a new stream that emits the set of latest event values
+  from all input streams whenever a new event arrives on any input stream. */
+/* NOTE: This is not included yet due to the variadic callback requirement... */
+/*external combineArray : (array 'a => 'b) => array (stream 'a) => stream 'a = "" [@@bs.module "most"];*/
 
 /* Create a new stream by combining sampled values from many input streams. */
 external sample1 : ('a => 'b) => stream 'sample => stream 'a => stream 'b =

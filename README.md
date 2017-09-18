@@ -60,6 +60,7 @@ I am also available by e-mail or DM on the Reason discord (username: @lilactown)
 
 1. `generate` - Reason doesn't have generator support yet
 2. `transduce` - Awkward to use in Reason/OCaml without a solid transducer impl (maybe coming soon?? 😉)
+3. `combineArray` - the callback for this is variadic (depending on how many streams you have in the array), not sure how to type it yet 😞
 
 ## What's different
 
