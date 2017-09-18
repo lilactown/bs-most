@@ -29,13 +29,32 @@ Most.(
  **/
 ```
 
+## How do I install it?
+
+Inside of a BuckleScript project:
+
+```
+npm install --save bs-most
+```
+
+Then add `bs-most` to your `bs-dependencies` in `bsconfig.json`:
+
+```
+{
+  ...
+  "bs-dependencies": [
+    "bs-most"
+  ]
+}
+```
+
 ## How do I use it?
 
-The Most.js [API docs](https://github.com/cujojs/most/blob/master/docs/api.md) are probably the best source of how to use it. This library attempts to provide very low-level bindings, except for what's noted in the **What's different** section.
+The Most.js [API docs](https://github.com/cujojs/most/blob/master/docs/api.md) are probably the best source of information about each method. This library attempts to provide very low-level bindings, except for what's noted in the **What's different** section.
 
-I try to provide comments next to each binding and am working on flushing out tests, so you can refer to those if you're confused.
+The bindings are a single file in `src/most.re`. I try to provide comments next to each binding and am working on flushing out tests so that users can refer to them.
 
-You can also shoot me an e-mail or DM on the Reason discord (username: @lilactown). 
+I am also available by e-mail or DM on the Reason discord (username: @lilactown). 
 
 ## What's missing
 
