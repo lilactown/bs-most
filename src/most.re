@@ -255,4 +255,39 @@ external mergeConcurrently : int => stream (stream 'a) => stream 'a = "" [@@bs.m
 /**
  * Awaiting promises
  **/
+/* Given a stream of promises, ie Stream<Promise<X>>,
+   return a new stream containing the fulfillment values, ie Stream<X>.
+   Event times may be delayed. However, event order is always preserved,
+   regardless of promise fulfillment order.
+   To create a stream that merges promises in fulfillment order,
+   use `flatMap(fromPromise, stream)`.
+   If a promise rejects, the stream will be in an error state
+   with the rejected promise's reason as its error.
+   See recoverWith for error recovery. */
 external awaitPromises : stream (Js.Promise.t 'a) => stream 'a = "" [@@bs.module "most"];
+
+
+/**
+ * Rate limiting streams
+ */
+/* Wait for a burst of events to subside and emit only the last event in the burst.
+   If the stream ends while there is a pending debounced event (e.g. via `until`),
+   the pending event will be emitted just before the stream ends. */
+external debounce : int => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+/* Limit the rate of events to at most one per throttlePeriod. */
+external throttle : int => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+
+/**
+ * Delaying streams
+ **/
+/* Timeshift a stream by a delay time in milliseconds. */
+external delay : int => stream 'a => stream 'a = "" [@@bs.module "most"];
+
+
+/**
+ * Sharing streams
+ **/
+/* Returns a stream equivalent to the original, but which can be shared more efficiently among multiple consumers. */
+external multicast : stream 'a => stream 'a = "" [@@bs.module "most"];
