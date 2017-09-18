@@ -344,11 +344,29 @@ testPromise "zip" (fun _ => {
             ])))
 });
 
-testPromise "merge";
+testPromise "sample1" (fun _ => {
+  open Most;
+  open Expect;
+  let id x => x;
+  let sampler = periodic 100 |> take 10;
+  let s = periodic 200 |> constant 2 |> startWith 1;
 
-testPromise "combine";
+  sample1 id sampler s |> reduce (fun acc n => [n, ...acc]) [] |>
+  Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [2,2,2,2,2,2,2,2,2,1])))
+});
 
-testPromise "sample2";
+
+testPromise "sample2" (fun _ => {
+  open Most;
+  open Expect;
+  let add x y => x + y;
+  let sampler = periodic 100 |> take 10;
+  let s1 = periodic 200 |> constant 1 |> startWith 1;
+  let s2 = periodic 300 |> constant 2;
+
+  sample2 add sampler s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+  Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [3,3,3,3,3,3,3,3,3,3])))
+});
 
 testPromise "sample3";
 

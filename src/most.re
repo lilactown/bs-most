@@ -206,18 +206,29 @@ external combine : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c =
   "" [@@bs.module "most"];
 
 /* Create a new stream by combining sampled values from many input streams. */
-external sample2 : ('a => 'a => 'b) => stream 'a => stream 'a => stream 'b =
+external sample1 : ('a => 'b) => stream 'sample => stream 'a => stream 'b =
   "sample" [@@bs.module "most"];
 
-external sample3 : ('a => 'a => 'a => 'b) => stream 'a => stream 'a => stream 'a => stream 'b =
+external sample2 : ('a => 'a => 'b) => stream 'sample => stream 'a => stream 'a => stream 'b =
+  "sample" [@@bs.module "most"];
+
+external sample3 :
+  ('a => 'a => 'a => 'b) => stream 'sample => stream 'a => stream 'a => stream 'a => stream 'b =
   "sample" [@@bs.module "most"];
 
 external sample4 :
-  ('a => 'a => 'a => 'a => 'b) => stream 'a => stream 'a => stream 'a => stream 'a => stream 'b =
+  ('a => 'a => 'a => 'a => 'b) =>
+  stream 'sample =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'a =>
+  stream 'b =
   "sample" [@@bs.module "most"];
 
 external sample5 :
   ('a => 'a => 'a => 'a => 'a => 'b) =>
+  stream 'sample =>
   stream 'a =>
   stream 'a =>
   stream 'a =>
@@ -228,6 +239,7 @@ external sample5 :
 
 external sample6 :
   ('a => 'a => 'a => 'a => 'a => 'a => 'b) =>
+  stream 'sample =>
   stream 'a =>
   stream 'a =>
   stream 'a =>
