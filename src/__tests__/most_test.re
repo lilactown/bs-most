@@ -241,9 +241,15 @@ testPromise
       )
   );
 
-testPromise "skip" (fun _ => 
-  Expect.(Most.(from [|1,2,3,4,5,6|] |> skip 3 |> reduce (fun acc n => [n, ...acc]) []) |>
-    Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [6,5,4])))));
+testPromise
+  "skip"
+  (
+    fun _ =>
+      Expect.(
+        Most.(from [|1, 2, 3, 4, 5, 6|] |> skip 3 |> reduce (fun acc n => [n, ...acc]) []) |>
+        Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [6, 5, 4])))
+      )
+  );
 
 testPromise "takeWhile";
 
@@ -261,7 +267,27 @@ testPromise "during";
 /**
  * Combining
  **/
-testPromise "merge";
+type mT =
+  | String string
+  | Int int;
+
+testPromise
+  "merge"
+  (
+    fun _ => {
+      open Most;
+      let s1 = fromList [Int 1, Int 2, Int 3];
+      let s2 = fromList [String "a", String "b", String "c"];
+      merge s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
+      Js.Promise.then_ (
+        fun result =>
+          Js.Promise.resolve (
+            Expect.expect result |>
+            Expect.toEqual [String "c", Int 3, String "b", Int 2, String "a", Int 1]
+          )
+      )
+    }
+  );
 
 testPromise "combine";
 
