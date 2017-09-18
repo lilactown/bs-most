@@ -229,7 +229,15 @@ testPromise "skipRepeatsWith";
 /**
  * Slicing
  **/
-testPromise "slice";
+testPromise
+  "slice"
+  (
+    fun _ =>
+      Expect.(
+        Most.(fromList [1, 2, 3, 4, 5, 6] |> slice 2 5 |> reduce (fun acc n => [n, ...acc]) []) |>
+        Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [5, 4, 3])))
+      )
+  );
 
 testPromise
   "take"
