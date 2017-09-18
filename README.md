@@ -45,10 +45,11 @@ You can also shoot me an e-mail or DM on the Reason discord (username: @lilactow
 ## What's different
 
 1. Predicates that normally return "truthy" values, now only accept returning booleans
-2. `sample` is variadic so we offer `sample2`, `sample3`... `sample6`
+2. `sample` is variadic so we offer `sample1`, `sample2`, `sample3`... `sample6`
 3. `fromEvent` - DOM events are supported, but generic `EventEmitter`'s are not yet
-4. `fromList` is a function that creates a stream from a Reason `List` type, e.g. `fromList([1, 2, 3])`
-4. `unfold` is modeled a bit differently - instead of taking in a JS object `{ done, value, seed }`, it takes an `option (value, seed)`.
+4. `from` only works on arrays right now; generic iterators must be coerced
+5. `fromList` is a function that creates a stream from a Reason `List` type, e.g. `fromList([1, 2, 3])`
+6. `unfold` is modeled a bit differently - instead of taking in a JS object `{ done, value, seed }`, it takes an `option (value, seed)`.
 Example:
 ```reason
 /* emits 2,4,6 then completes */
