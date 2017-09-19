@@ -95,7 +95,7 @@ This library also includes some bindings for [Subjects](https://github.com/mostj
 - `Subject.next`: emits a value on a subject
 - `Subject.error`: emits an error on a subject
 - `Subject.complete`: completes a subject with no value
-- `Subject.completeWith`: complets a subject with a value
+- `Subject.completeWith`: completes a subject with a value
 
 ## Build
 ```
