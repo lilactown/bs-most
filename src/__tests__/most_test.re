@@ -18,8 +18,8 @@ testPromise
     fun _ => {
       let empty = Most.empty ();
       let success _ => Helpers.asyncExpectToEqual true true;
-      Most.observe (fun _ => raise (Failure "this shouldn't happen")) empty |>
-      Js.Promise.then_ success
+      Most.observe (fun _ => raise (Failure "this shouldn't happen")) empty
+      |> Js.Promise.then_ success
     }
   );
 
@@ -51,8 +51,9 @@ testPromise
       let promise = Js.Promise.resolve "OK";
       let result = ref "";
       let success = Helpers.asyncExpectToEqual "OK";
-      Most.fromPromise promise |> Most.observe (fun res => result := res) |>
-      Js.Promise.then_ (fun _ => success !result)
+      Most.fromPromise promise
+      |> Most.observe (fun res => result := res)
+      |> Js.Promise.then_ (fun _ => success !result)
     }
   );
 
@@ -108,9 +109,9 @@ testPromise
               None
             }
         )
-        1 |>
-      Most.observe combine |>
-      Js.Promise.then_ success
+        1
+      |> Most.observe combine
+      |> Js.Promise.then_ success
     }
   );
 
@@ -146,8 +147,10 @@ testPromise
       let combineResult = Helpers.combineArray result;
       let success _ => Helpers.asyncExpectToEqual [|2, 4, 6|] result;
       Most.(
-        from [|1, 2, 3|] |> map (fun n => n * 2) |> observe combineResult |>
-        Js.Promise.then_ success
+        from [|1, 2, 3|]
+        |> map (fun n => n * 2)
+        |> observe combineResult
+        |> Js.Promise.then_ success
       )
     }
   );
@@ -170,8 +173,10 @@ testPromise
       let result = [||];
       let combine = Helpers.combineArray result;
       let success _ => Helpers.asyncExpectToEqual [|0, 1, 3, 6, 10|] result;
-      Most.from [|1, 2, 3, 4|] |> Most.scan (fun accum n => accum + n) 0 |> Most.observe combine |>
-      Js.Promise.then_ success
+      Most.from [|1, 2, 3, 4|]
+      |> Most.scan (fun accum n => accum + n) 0
+      |> Most.observe combine
+      |> Js.Promise.then_ success
     }
   );
 
@@ -182,9 +187,10 @@ testPromise
       let result = [||];
       let combine = Helpers.combineArray result;
       let success _ => Helpers.asyncExpectToEqual [|0, 1, 0, 2, 0, 3, 0, 4|] result;
-      Most.from [|1, 2, 3, 4|] |> Most.flatMap (fun x => Most.from [|0, x|]) |>
-      Most.observe combine |>
-      Js.Promise.then_ success
+      Most.from [|1, 2, 3, 4|]
+      |> Most.flatMap (fun x => Most.from [|0, x|])
+      |> Most.observe combine
+      |> Js.Promise.then_ success
     }
   );
 
@@ -206,19 +212,19 @@ testPromise
   "filter"
   (
     fun _ =>
-      Most.from [|1, 2, 3, 4, 5, 6|] |>
-      Most.filter (
-        fun n =>
-          if (n mod 2 === 0) {
-            Js.true_
-          } else {
-            Js.false_
-          }
-      ) |>
-      Most.reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.then_ (
-        fun result => Js.Promise.resolve Expect.(expect result |> toEqual [6, 4, 2])
-      )
+      Most.from [|1, 2, 3, 4, 5, 6|]
+      |> Most.filter (
+           fun n =>
+             if (n mod 2 === 0) {
+               Js.true_
+             } else {
+               Js.false_
+             }
+         )
+      |> Most.reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.then_ (
+           fun result => Js.Promise.resolve Expect.(expect result |> toEqual [6, 4, 2])
+         )
   );
 
 testPromise "skipRepeats";
@@ -234,8 +240,8 @@ testPromise
   (
     fun _ =>
       Expect.(
-        Most.(fromList [1, 2, 3, 4, 5, 6] |> slice 2 5 |> reduce (fun acc n => [n, ...acc]) []) |>
-        Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [5, 4, 3])))
+        Most.(fromList [1, 2, 3, 4, 5, 6] |> slice 2 5 |> reduce (fun acc n => [n, ...acc]) [])
+        |> Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [5, 4, 3])))
       )
   );
 
@@ -244,8 +250,8 @@ testPromise
   (
     fun _ =>
       Expect.(
-        Most.(from [|1, 2, 3, 4, 5, 6|] |> take 3 |> reduce (fun acc n => [n, ...acc]) []) |>
-        Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [3, 2, 1])))
+        Most.(from [|1, 2, 3, 4, 5, 6|] |> take 3 |> reduce (fun acc n => [n, ...acc]) [])
+        |> Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [3, 2, 1])))
       )
   );
 
@@ -254,8 +260,8 @@ testPromise
   (
     fun _ =>
       Expect.(
-        Most.(from [|1, 2, 3, 4, 5, 6|] |> skip 3 |> reduce (fun acc n => [n, ...acc]) []) |>
-        Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [6, 5, 4])))
+        Most.(from [|1, 2, 3, 4, 5, 6|] |> skip 3 |> reduce (fun acc n => [n, ...acc]) [])
+        |> Js.Promise.(then_ (fun result => resolve (expect result |> toEqual [6, 5, 4])))
       )
   );
 
@@ -286,14 +292,15 @@ testPromise
       open Most;
       let s1 = fromList [Int 1, Int 2, Int 3];
       let s2 = fromList [String "a", String "b", String "c"];
-      merge s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.then_ (
-        fun result =>
-          Js.Promise.resolve (
-            Expect.expect result |>
-            Expect.toEqual [String "c", Int 3, String "b", Int 2, String "a", Int 1]
-          )
-      )
+      merge s1 s2
+      |> reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.then_ (
+           fun result =>
+             Js.Promise.resolve (
+               Expect.expect result
+               |> Expect.toEqual [String "c", Int 3, String "b", Int 2, String "a", Int 1]
+             )
+         )
     }
   );
 
@@ -305,23 +312,24 @@ testPromise
       let s1 = fromList [Int 1, Int 2, Int 3];
       let s2 = fromList [String "a", String "b", String "c"];
       let toTuple a b => (a, b);
-      combine toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.(
-        then_ (
-          fun result =>
-            resolve
-              Expect.(
-                expect result |>
-                toEqual [
-                  (Int 3, String "c"),
-                  (Int 3, String "b"),
-                  (Int 2, String "b"),
-                  (Int 2, String "a"),
-                  (Int 1, String "a")
-                ]
-              )
-        )
-      )
+      combine toTuple s1 s2
+      |> reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.(
+           then_ (
+             fun result =>
+               resolve
+                 Expect.(
+                   expect result
+                   |> toEqual [
+                        (Int 3, String "c"),
+                        (Int 3, String "b"),
+                        (Int 2, String "b"),
+                        (Int 2, String "a"),
+                        (Int 1, String "a")
+                      ]
+                 )
+           )
+         )
     }
   );
 
@@ -333,17 +341,18 @@ testPromise
       let s1 = fromList [Int 1, Int 2, Int 3];
       let s2 = fromList [String "a", String "b", String "c"];
       let toTuple a b => (a, b);
-      zip toTuple s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.(
-        then_ (
-          fun result =>
-            resolve
-              Expect.(
-                expect result |>
-                toEqual [(Int 3, String "c"), (Int 2, String "b"), (Int 1, String "a")]
-              )
-        )
-      )
+      zip toTuple s1 s2
+      |> reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.(
+           then_ (
+             fun result =>
+               resolve
+                 Expect.(
+                   expect result
+                   |> toEqual [(Int 3, String "c"), (Int 2, String "b"), (Int 1, String "a")]
+                 )
+           )
+         )
     }
   );
 
@@ -356,10 +365,11 @@ testPromise
       let id x => x;
       let sampler = periodic 100 |> take 10;
       let s = periodic 200 |> constant 2 |> startWith 1;
-      sample1 id sampler s |> reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.(
-        then_ (fun result => resolve (expect result |> toEqual [2, 2, 2, 2, 2, 2, 2, 2, 2, 1]))
-      )
+      sample1 id sampler s
+      |> reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.(
+           then_ (fun result => resolve (expect result |> toEqual [2, 2, 2, 2, 2, 2, 2, 2, 2, 1]))
+         )
     }
   );
 
@@ -373,10 +383,11 @@ testPromise
       let sampler = periodic 100 |> take 10;
       let s1 = periodic 200 |> constant 1 |> startWith 1;
       let s2 = periodic 300 |> constant 2;
-      sample2 add sampler s1 s2 |> reduce (fun acc n => [n, ...acc]) [] |>
-      Js.Promise.(
-        then_ (fun result => resolve (expect result |> toEqual [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]))
-      )
+      sample2 add sampler s1 s2
+      |> reduce (fun acc n => [n, ...acc]) []
+      |> Js.Promise.(
+           then_ (fun result => resolve (expect result |> toEqual [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]))
+         )
     }
   );
 
@@ -430,19 +441,21 @@ testPromise "multicast";
 /**
  * Subjects!
  **/
-testPromise "basic Subject" (fun _ => {
-  open Most;
-  open Expect;
-  let subj = Subject.make ();
-  let stream = Subject.asStream subj;
-
-  let promise = reduce (fun acc n => [n, ...acc]) [] stream |>
-  Js.Promise.then_ (fun result => Js.Promise.resolve (expect result |> toEqual [3,2,1]));
-
-  Subject.next 1 subj;
-  Subject.next 2 subj;
-  Subject.next 3 subj;
-  Subject.complete subj;
-
-  promise  
-});
+testPromise
+  "basic Subject"
+  (
+    fun _ => {
+      open Most;
+      open Expect;
+      let subj = Subject.make ();
+      let stream = Subject.asStream subj;
+      let promise =
+        reduce (fun acc n => [n, ...acc]) [] stream
+        |> Js.Promise.then_ (fun result => Js.Promise.resolve (expect result |> toEqual [3, 2, 1]));
+      Subject.next 1 subj;
+      Subject.next 2 subj;
+      Subject.next 3 subj;
+      Subject.complete subj;
+      promise
+    }
+  );

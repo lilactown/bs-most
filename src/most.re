@@ -209,10 +209,9 @@ external combine : ('a => 'b => 'c) => stream 'a => stream 'b => stream 'c =
   "" [@@bs.module "most"];
 
 /* Array form of combine. Create a new stream that emits the set of latest event values
-  from all input streams whenever a new event arrives on any input stream. */
+   from all input streams whenever a new event arrives on any input stream. */
 /* NOTE: This is not included yet due to the variadic callback requirement... */
 /*external combineArray : (array 'a => 'b) => array (stream 'a) => stream 'a = "" [@@bs.module "most"];*/
-
 /* Create a new stream by combining sampled values from many input streams. */
 external sample1 : ('a => 'b) => stream 'sample => stream 'a => stream 'b =
   "sample" [@@bs.module "most"];
@@ -331,4 +330,4 @@ module Subject = {
   external error : Js.Exn.t => t 'a => t Js.Exn.t = "" [@@bs.module "most-subject"];
   external complete : t 'a => t 'a = "" [@@bs.send];
   external completeWith : 'a => t 'a => t 'a = "complete" [@@bs.module "most-subject"];
-}
+};
