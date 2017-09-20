@@ -1,6 +1,6 @@
 {
   "name": "bs-most",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reason/BuckleScript bindings for the Most.js reactive toolkit Edit",
   "repository": {
     "type": "git",
