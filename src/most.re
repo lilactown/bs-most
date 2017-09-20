@@ -123,7 +123,7 @@ external map : ('a => 'b) => stream 'a => stream 'b = "" [@@bs.module "most"];
 external constant : 'a => stream 'b => stream 'a = "" [@@bs.module "most"];
 
 /* Create a new stream containing incrementally accumulated results, starting with the provided initial value. */
-external scan : ('accum => 'a => 'b) => 'a => stream 'a => stream 'b = "" [@@bs.module "most"];
+external scan : ('accum => 'a => 'b) => 'accum => stream 'a => stream 'b = "" [@@bs.module "most"];
 
 /* Transform each event in stream into a stream, and then merge it into the resulting stream. */
 external flatMap : ('a => stream 'b) => stream 'a => stream 'b = "" [@@bs.module "most"];
