@@ -48,6 +48,8 @@ Then add `bs-most` to your `bs-dependencies` in `bsconfig.json`:
 }
 ```
 
+An example of implementing the Redux architecture in a ReasonReact project can be [seen here](https://github.com/Lokeh/reason-autocomplete).
+
 ## How do I use it?
 
 The Most.js [API docs](https://github.com/cujojs/most/blob/master/docs/api.md) are probably the best source of information about each method. This library attempts to provide very low-level bindings, except for what's noted in the **What's different** section.
