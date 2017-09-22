@@ -29,6 +29,8 @@ Most.(
  **/
 ```
 
+An example of implementing the Redux architecture in a ReasonReact project can be [seen here](https://github.com/Lokeh/reason-autocomplete).
+
 ## How do I install it?
 
 Inside of a BuckleScript project:
@@ -47,8 +49,6 @@ Then add `bs-most` to your `bs-dependencies` in `bsconfig.json`:
   ]
 }
 ```
-
-An example of implementing the Redux architecture in a ReasonReact project can be [seen here](https://github.com/Lokeh/reason-autocomplete).
 
 ## How do I use it?
 
