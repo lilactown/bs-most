@@ -32,7 +32,7 @@
   "homepage": "https://github.com/Lokeh/bs-most#readme",
   "devDependencies": {
     "bs-jest": "^0.1.0",
-    "bs-platform": "1.9.1"
+    "bs-platform": "^2.2.3"
   },
   "dependencies": {
     "most": "^1.7.0",
