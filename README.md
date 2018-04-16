@@ -4,19 +4,21 @@ BuckleScript bindings for [Most.js](https://github.com/cujojs/most).
 
 In [Reason](https://reasonml.github.io/):
 ```reason
-let add x y => x + y;
-let isEven x => x mod 2 === 0;
+let add = (x, y) => x + y;
+
+let isEven = x => x mod 2 === 0 |> Js.Boolean.to_js_boolean;
 
 Most.(
-  fromList [0,1,2,3,4,5,6,7,8]
-  |> map (add 2)
-  |> filter isEven
-  |> observe (fun x => Js.log x)
-  |> Js.Promise.then_ (fun _ => {
-    Js.log "Stream completed";
-    Js.Promise.resolve ()
-  })
+  fromList([0, 1, 2, 3, 4, 5, 6, 7, 8])
+  |> map(add(2))
+  |> filter(isEven)
+  |> observe(x => Js.log(x))
+  |> Js.Promise.then_((_) => {
+       Js.log("Stream completed");
+       Js.Promise.resolve();
+     })
 );
+
 
 /**
  * Logs:
@@ -75,17 +77,16 @@ I am also available by e-mail or DM on the Reason discord (username: @lilactown)
 Example:
 ```reason
 /* emits 2,4,6 then completes */
-Most.unfold
-  (
-    fun seed =>
-      if (seed < 4) {
-        let nextSeed = seed + 1;
-        Some (seed * 2, nextSeed)
-      } else {
-        None
-      }
-  )
-  1;
+Most.unfold(
+  (seed) =>
+    if (seed < 4) {
+      let nextSeed = seed + 1;
+      Some((seed * 2, nextSeed));
+    } else {
+      None;
+    },
+  1
+);
 ```
 
 # Subjects
