@@ -18,7 +18,8 @@
 *.annot
 *.cmj
 *.bak
-lib/bs
+lib
+src/*.js
 *.mlast
 *.mliast
 .vscode
