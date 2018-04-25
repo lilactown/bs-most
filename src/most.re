@@ -106,6 +106,10 @@ external iteratePromise : ('a => Js.Promise.t('a), 'a) => stream('a) =
 external fromEvent : (string, Dom.eventTarget, Js.boolean) => stream(Dom.event) =
   "";
 
+[@bs.module "most"]
+external fromEventEmitter : (string, 'a, Js.boolean) => stream('b) =
+  "fromEvent";
+
 /* Concatenates two streams together */
 [@bs.send.pipe : stream('a)] external concat : stream('a) => stream('a) = "";
 
