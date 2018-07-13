@@ -103,7 +103,7 @@ external iteratePromise : ('a => Js.Promise.t('a), 'a) => stream('a) =
 
 /* Create a stream of events from a DOM EventTarget */
 [@bs.module "most"]
-external fromEvent : (string, Dom.eventTarget, Js.boolean) => stream(Dom.event) =
+external fromEvent : (string, Dom.eventTarget, bool) => stream(Dom.event) =
   "";
 
 /* Concatenates two streams together */
@@ -175,14 +175,14 @@ external timestamp :
  **/
 /* Create a stream containing only events for which the predicate returns true. */
 [@bs.module "most"]
-external filter : ('a => Js.boolean, stream('a)) => stream('a) = "";
+external filter : ('a => bool, stream('a)) => stream('a) = "";
 
 /* Create a new stream with adjacent repeated events removed. */
 [@bs.module "most"] external skipRepeats : stream('a) => stream('a) = "";
 
 /* Create a new stream with adjacent repeated events removed, using the provided comparison function */
 [@bs.module "most"]
-external skipRepeatsWith : (('a, 'a) => Js.boolean, stream('a)) => stream('a) =
+external skipRepeatsWith : (('a, 'a) => bool, stream('a)) => stream('a) =
   "";
 
 
@@ -204,15 +204,15 @@ external skipRepeatsWith : (('a, 'a) => Js.boolean, stream('a)) => stream('a) =
 
 /* Create a new stream containing all events until predicate returns false. */
 [@bs.module "most"]
-external takeWhile : ('a => Js.boolean, stream('a)) => stream('a) = "";
+external takeWhile : ('a => bool, stream('a)) => stream('a) = "";
 
 /* Create a new stream containing all events after predicate returns false. */
 [@bs.module "most"]
-external skipWhile : ('a => Js.boolean, stream('a)) => stream('a) = "";
+external skipWhile : ('a => bool, stream('a)) => stream('a) = "";
 
 /* Create a new stream containing all events before and including when the predicate returns true. */
 [@bs.module "most"]
-external skipAfter : ('a => Js.boolean, stream('a)) => stream('a) = "";
+external skipAfter : ('a => bool, stream('a)) => stream('a) = "";
 
 /* Create a new stream containing all events until endSignal emits an event. */
 [@bs.module "most"]
