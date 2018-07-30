@@ -199,14 +199,7 @@ testPromise(
   "filter",
   (_) =>
     Most.from([|1, 2, 3, 4, 5, 6|])
-    |> Most.filter(
-         (n) =>
-           if (n mod 2 === 0) {
-             Js.true_
-           } else {
-             Js.false_
-           }
-       )
+    |> Most.filter((n) => n mod 2 === 0)
     |> Most.reduce((acc, n) => [n, ...acc], [])
     |> Js.Promise.then_(
          (result) => Js.Promise.resolve(Expect.(expect(result) |> toEqual([6, 4, 2])))
