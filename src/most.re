@@ -24,14 +24,13 @@ type observer('a) = {
   .
   "next": 'a => unit,
   "error": Js.Exn.t => unit,
-  "complete": unit => unit
+  "complete": unit => unit,
 };
 
 type subscription = {. "unsubscribe": unit => unit};
 
-[@bs.send.pipe : stream('a)]
+[@bs.send.pipe: stream('a)]
 external subscribe : observer('a) => subscription = "";
-
 
 /***
  * Stream creation
@@ -74,15 +73,16 @@ let unfold = (f: 'a => option(('b, 'a))) : ('a => stream('b)) =>
 let fromList = list =>
   unfold(
     curList =>
-      switch curList {
+      switch (curList) {
       | [] => None
       | [x, ...rest] => Some((x, rest))
       },
-    list
+    list,
   );
 
 /* Creates a stream from a promise that completes once the promise resolves */
-[@bs.module "most"] external fromPromise : Js.Promise.t('a) => stream('a) = "";
+[@bs.module "most"]
+external fromPromise : Js.Promise.t('a) => stream('a) = "";
 
 /* Create an infinite stream containing events that arrive every period milliseconds,
    and whose value is undefined. */
@@ -107,26 +107,24 @@ external fromEvent : (string, Dom.eventTarget, bool) => stream(Dom.event) =
   "";
 
 [@bs.module "most"]
-external fromEventEmitter : (string, 'a, Js.boolean) => stream('b) =
-  "fromEvent";
+external fromEventEmitter : (string, 'a, bool) => stream('b) = "fromEvent";
 
 /* Concatenates two streams together */
-[@bs.send.pipe : stream('a)] external concat : stream('a) => stream('a) = "";
+[@bs.send.pipe: stream('a)] external concat : stream('a) => stream('a) = "";
 
 /* Appends an element to the start of a stream */
 [@bs.module "most"] external startWith : ('a, stream('a)) => stream('a) = "";
-
 
 /***
  * Error handling
  **/
 /* Recover from a stream failure by calling a function to create a new stream. */
 [@bs.module "most"]
-external recoverWith : (Js.Exn.t => stream('a), stream('a)) => stream('a) = "";
+external recoverWith : (Js.Exn.t => stream('a), stream('a)) => stream('a) =
+  "";
 
 /* Create a stream in the error state. */
 [@bs.module "most"] external throwError : Js.Exn.t => stream(unit) = "";
-
 
 /***
  * Transforming
@@ -165,14 +163,14 @@ external timestamp :
     {
       .
       "time": int,
-      "value": 'a
-    }
+      "value": 'a,
+    },
   ) =
   "";
 
 /* Perform a side-effect for each event in stream. */
-[@bs.module "most"] external tap : ('a => unit, stream('a)) => stream('a) = "";
-
+[@bs.module "most"]
+external tap : ('a => unit, stream('a)) => stream('a) = "";
 
 /***
  * Filtering
@@ -186,9 +184,7 @@ external filter : ('a => bool, stream('a)) => stream('a) = "";
 
 /* Create a new stream with adjacent repeated events removed, using the provided comparison function */
 [@bs.module "most"]
-external skipRepeatsWith : (('a, 'a) => bool, stream('a)) => stream('a) =
-  "";
-
+external skipRepeatsWith : (('a, 'a) => bool, stream('a)) => stream('a) = "";
 
 /***
  * Slicing
@@ -196,7 +192,8 @@ external skipRepeatsWith : (('a, 'a) => bool, stream('a)) => stream('a) =
 /* Create a new stream containing only events where start <= index < end,
     where index is the ordinal index of an event in stream.
    If stream contains fewer than start events, the returned stream will be empty. */
-[@bs.module "most"] external slice : (int, int, stream('a)) => stream('a) = "";
+[@bs.module "most"]
+external slice : (int, int, stream('a)) => stream('a) = "";
 
 /* Create a new stream containing at most n events from stream.
    If stream contains fewer than n events, the returned stream will be effectively equivalent to stream. */
@@ -230,7 +227,6 @@ external since : (stream('b), stream('a)) => stream('a) = "";
 [@bs.module "most"]
 external during : (stream(stream('ending)), stream('a)) => stream('a) = "";
 
-
 /***
  * Combining
  **/
@@ -239,12 +235,14 @@ external during : (stream(stream('ending)), stream('a)) => stream('a) = "";
 external merge : (stream('a), stream('a)) => stream('a) = "";
 
 /* Array form of merge. Create a new stream containing all events from all streams in the array. */
-[@bs.module "most"] external mergeArray : array(stream('a)) => stream('a) = "";
+[@bs.module "most"]
+external mergeArray : array(stream('a)) => stream('a) = "";
 
 /* Create a new stream that emits the set of latest event values from all input streams
    whenever a new event arrives on any input stream. */
 [@bs.module "most"]
-external combine : (('a, 'b) => 'c, stream('a), stream('b)) => stream('c) = "";
+external combine : (('a, 'b) => 'c, stream('a), stream('b)) => stream('c) =
+  "";
 
 /* Array form of combine. Create a new stream that emits the set of latest event values
    from all input streams whenever a new event arrives on any input stream. */
@@ -262,7 +260,13 @@ external sample2 :
 
 [@bs.module "most"]
 external sample3 :
-  (('a, 'a, 'a) => 'b, stream('sample), stream('a), stream('a), stream('a)) =>
+  (
+    ('a, 'a, 'a) => 'b,
+    stream('sample),
+    stream('a),
+    stream('a),
+    stream('a)
+  ) =>
   stream('b) =
   "sample";
 
@@ -315,7 +319,6 @@ external sampleWith : (stream('sample), stream('a)) => stream('a) = "";
 [@bs.module "most"]
 external zip : (('a, 'b) => 'c, stream('a), stream('b)) => stream('c) = "";
 
-
 /***
  * Combining higher-order streams
  **/
@@ -333,7 +336,6 @@ external switchLatest : stream(stream('a)) => stream('a) = "";
 [@bs.module "most"]
 external mergeConcurrently : (int, stream(stream('a))) => stream('a) = "";
 
-
 /***
  * Awaiting promises
  **/
@@ -349,7 +351,6 @@ external mergeConcurrently : (int, stream(stream('a))) => stream('a) = "";
 [@bs.module "most"]
 external awaitPromises : stream(Js.Promise.t('a)) => stream('a) = "";
 
-
 /***
  * Rate limiting streams
  */
@@ -361,20 +362,17 @@ external awaitPromises : stream(Js.Promise.t('a)) => stream('a) = "";
 /* Limit the rate of events to at most one per throttlePeriod. */
 [@bs.module "most"] external throttle : (int, stream('a)) => stream('a) = "";
 
-
 /***
  * Delaying streams
  **/
 /* Timeshift a stream by a delay time in milliseconds. */
 [@bs.module "most"] external delay : (int, stream('a)) => stream('a) = "";
 
-
 /***
  * Sharing streams
  **/
 /* Returns a stream equivalent to the original, but which can be shared more efficiently among multiple consumers. */
 [@bs.module "most"] external multicast : stream('a) => stream('a) = "";
-
 
 /***
  *  Subjects!
