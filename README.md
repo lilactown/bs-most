@@ -6,7 +6,7 @@ In [Reason](https://reasonml.github.io/):
 ```reason
 let add = (x, y) => x + y;
 
-let isEven = x => x mod 2 === 0 |> Js.Boolean.to_js_boolean;
+let isEven = x => x mod 2 === 0;
 
 Most.(
   fromList([0, 1, 2, 3, 4, 5, 6, 7, 8])
